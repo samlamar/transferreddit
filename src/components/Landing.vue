@@ -99,9 +99,6 @@ export default {
 
     mounted() {
 
-        console.log('env');
-        console.log(process.env);
-        console.log(this.$route);
         if (localStorage.getItem("savedPosts")) {
             var posts = JSON.parse(localStorage.getItem("savedPosts"));
             this.migrating = true;
@@ -111,7 +108,6 @@ export default {
             this.requesting = true;
             
             this.getRedditToken().then(() => {
-                console.log('in mounted ' + this.token);
                 if (this.migrating) {
                     this.saveToNewAccount();
                 }
@@ -153,8 +149,6 @@ export default {
 
 
             http.get(url).then(response => {
-                console.log('in save to new account ')
-                console.log(response.body)
                 localStorage.removeItem('savedPosts');
                 localStorage.removeItem('token1');
                 if (!response.body.error) {
@@ -191,11 +185,7 @@ export default {
             var call = await http
                 .get(url)
                 .then(response => {
-                    console.log('request reddit token ')
-                    console.log(response.body);
                     this.token = response.body.access_token;
-                    console.log('request reddit token token: ')
-                    console.log(this.token);
                     localStorage.setItem("token1", this.token);
                     // this.getUsername();
                 })
@@ -208,8 +198,6 @@ export default {
             const url = `${process.env.VUE_APP_API_URL}getUsername/${this.token}`;
 
             var call = await http.get(url).then(response => {
-                console.log('get username : ')
-                console.log(response.body);
                 this.username = response.body.name;
                 // this.getSavedPosts();
             });
@@ -220,8 +208,6 @@ export default {
                 this.token}`;
 
             var call = await http.get(url).then(response => {
-                console.log('getsavedposts ')
-                console.log(response.body);
                 if (!this.migrating) {
                     this.savedPosts = response.body;
                 }
