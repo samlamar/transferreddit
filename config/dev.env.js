@@ -11,7 +11,7 @@ const {
     VUE_APP_DURATION,
     VUE_APP_API_URL,
     VUE_APP_REDIRECT_URI,
-} = require("./secret.js");
+} = require("./devsecret.js");
 
 module.exports = merge(prodEnv, {
     NODE_ENV: '"development"',

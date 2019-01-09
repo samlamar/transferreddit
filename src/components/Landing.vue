@@ -32,7 +32,7 @@
         </div>
 
         <div v-if="migrating && !permissionsError && !success" class="warning">
-            <p>Don't forget to log out of the old account and log in to the right one if necessary</p>
+            <p class="animated infinite flash slower">Don't forget to log out of the old account and log in to the right one if necessary</p>
         </div>
 
         <a href="https://github.com/samlamar/transferreddit" target="_blank">
