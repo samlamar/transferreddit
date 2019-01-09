@@ -32,7 +32,7 @@
             <p>Don't forget to log out of the old account and log in to the right one if necessary</p>
         </div>
 
-        <a href="https://github.com/samlamar/reddit-transfer-client" target="_blank">
+        <a href="https://github.com/samlamar/transferreddit" target="_blank">
             Check out my code on
             <img class="git-logo" src="../assets/github-logo.png" alt>
         </a>
