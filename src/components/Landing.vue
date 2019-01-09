@@ -1,7 +1,7 @@
 <template>
     <div class="container wrapper">
         <a class="home-button" @click.prevent="homeClick">
-            <h1 class="title">Account transfer for reddit</h1>
+            <h1 class="title">Transferreddit</h1>
         </a>
 
         <h5>Transfer your saved posts from one account to another</h5>
@@ -114,6 +114,8 @@ export default {
             this.clearLocalStorage();
             window.open("/", "_self");
         },
+
+
         async getRedditToken() {
             this.currentState = this.$route.query.state;
             if (!this.$route.query.error) {
@@ -123,10 +125,18 @@ export default {
                         this.getUsername()
                             .then(() => {
                                 if (!this.migrating) {
-                                    this.getSavedPosts();
+                                    this.getSavedPosts()
+                                    .then(() => {
+
+                                    })
+                                    .catch(error => {
+                                        console.log('Could not get saved posts: ')
+                                        console.log(error);
+                                    });
                                 }
                             })
                             .catch(error => {
+                                this.clearLocalStorage();
                                 console.log(error);
                             });
                     })
