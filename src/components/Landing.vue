@@ -1,6 +1,6 @@
 <template>
     <div class="container wrapper">
-        <a href="/" class="home-button" @click="localStorage.clear()">
+        <a class="home-button" @click.prevent="homeClick">
             <h1 class="title">Account transfer for reddit</h1>
         </a>
 
@@ -35,10 +35,8 @@
         </div>
 
         <!-- <img class="logo" src="../assets/reddit-logo.png" alt> -->
-        <a
-            href="https://github.com/samlamar/reddit-transfer-client"
-            target="_blank"
-        >Check out my code on
+        <a href="https://github.com/samlamar/reddit-transfer-client" target="_blank">
+            Check out my code on
             <img class="git-logo" src="../assets/github-logo.png" alt>
         </a>
     </div>
@@ -50,8 +48,6 @@ const http = require("superagent");
 const uuidv4 = require("uuid/v4");
 // require('dotenv').config()
 
-
-
 import LoadingSpinner from "./LoadingSpinner.vue";
 
 const username = process.env.VUE_APP_USERNAME;
@@ -60,7 +56,7 @@ const clientId = process.env.VUE_APP_CLIENT_ID;
 const secret = process.env.VUE_APP_SECRET;
 const redirectUri = process.env.VUE_APP_REDIRECT_URI;
 const scope = process.env.VUE_APP_SCOPE;
-const duration = process.env.VUE_APP_DURATION
+const duration = process.env.VUE_APP_DURATION;
 
 export default {
     components: {
@@ -98,7 +94,6 @@ export default {
     },
 
     mounted() {
-
         if (localStorage.getItem("savedPosts")) {
             var posts = JSON.parse(localStorage.getItem("savedPosts"));
             this.migrating = true;
@@ -106,7 +101,7 @@ export default {
         if (this.$route.query.code) {
             this.permissionsError = false;
             this.requesting = true;
-            
+
             this.getRedditToken().then(() => {
                 if (this.migrating) {
                     this.saveToNewAccount();
@@ -120,6 +115,10 @@ export default {
     },
 
     methods: {
+        homeClick() {
+            clearLocalStorage();
+            window.open("/", "_self");
+        },
         async getRedditToken() {
             this.currentState = this.$route.query.state;
             if (!this.$route.query.error) {
@@ -137,6 +136,8 @@ export default {
                             });
                     })
                     .catch(error => {
+                        clearLocalStorage();
+
                         console.log(error);
                     });
             } else {
@@ -144,13 +145,15 @@ export default {
             }
         },
 
+        clearLocalStorage() {
+            localStorage.removeItem("savedPosts");
+            localStorage.removeItem("token1");
+        },
         saveToNewAccount() {
             const url = `${process.env.VUE_APP_API_URL}save/${this.token}`;
 
-
             http.get(url).then(response => {
-                localStorage.removeItem('savedPosts');
-                localStorage.removeItem('token1');
+                clearLocalStorage();
                 if (!response.body.error) {
                     this.success = true;
                 }
@@ -171,16 +174,18 @@ export default {
                 this.appData.clientId +
                 "&state=" +
                 state +
-                "&redirect_uri=" +  
+                "&redirect_uri=" +
                 this.appData.redirectUri;
 
-                window.open(query, "_self");
+            window.open(query, "_self");
         },
 
         async requestRedditToken() {
             //you stupid fuck, you spent two days racking your brains on this dumb error
             //you didnt put http before localhost.
-            const url = `${process.env.VUE_APP_API_URL}requestToken/${this.currentState}/${this.requestCode}`;
+            const url = `${process.env.VUE_APP_API_URL}requestToken/${
+                this.currentState
+            }/${this.requestCode}`;
 
             var call = await http
                 .get(url)
@@ -195,7 +200,9 @@ export default {
         },
 
         async getUsername() {
-            const url = `${process.env.VUE_APP_API_URL}getUsername/${this.token}`;
+            const url = `${process.env.VUE_APP_API_URL}getUsername/${
+                this.token
+            }`;
 
             var call = await http.get(url).then(response => {
                 this.username = response.body.name;
@@ -204,8 +211,9 @@ export default {
         },
 
         async getSavedPosts() {
-            const url = `${process.env.VUE_APP_API_URL}getSaved/${this.username}/${
-                this.token}`;
+            const url = `${process.env.VUE_APP_API_URL}getSaved/${
+                this.username
+            }/${this.token}`;
 
             var call = await http.get(url).then(response => {
                 if (!this.migrating) {
@@ -248,21 +256,19 @@ img {
     height: auto;
 }
 
-.git-logo, .title {
+.git-logo,
+.title {
     transition-property: transform;
     transition-duration: 300ms;
-
 }
 
-.git-logo:hover{
+.git-logo:hover {
     transform: scale(1.4);
 }
 
 .title:hover {
     transform: scale(1.05);
 }
-
-
 
 .permissions-button {
     padding: 15px;
