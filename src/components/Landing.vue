@@ -13,7 +13,10 @@
                 @click="getPermissions"
             >{{migrating ? secondMessage : firstMessage}}</button>
 
-            <loading-spinner v-if="requesting"></loading-spinner>
+            <div v-if="requesting">
+                <loading-spinner></loading-spinner>
+                <p>{{statusMessage}}</p>
+            </div>
 
             <div class="alert alert-dismissible alert-danger" v-if="permissionsError">
                 <strong>Couldn't get the permissions</strong>
@@ -61,6 +64,7 @@ export default {
 
     data() {
         return {
+            statusMessage: "",
             firstMessage:
                 "Log into your old account (where to take the saved posts from)",
             secondMessage:
@@ -115,24 +119,25 @@ export default {
             window.open("/", "_self");
         },
 
-
         async getRedditToken() {
             this.currentState = this.$route.query.state;
             if (!this.$route.query.error) {
                 this.requestCode = this.$route.query.code;
                 await this.requestRedditToken()
                     .then(() => {
+
                         this.getUsername()
                             .then(() => {
                                 if (!this.migrating) {
                                     this.getSavedPosts()
-                                    .then(() => {
-
-                                    })
-                                    .catch(error => {
-                                        console.log('Could not get saved posts: ')
-                                        console.log(error);
-                                    });
+                                        .then(() => {
+                                        })
+                                        .catch(error => {
+                                            console.log(
+                                                "Could not get saved posts: "
+                                            );
+                                            console.log(error);
+                                        });
                                 }
                             })
                             .catch(error => {
@@ -186,6 +191,8 @@ export default {
         },
 
         async requestRedditToken() {
+            this.statusMessage = 'Requesting authentication token';
+
             const url = `${process.env.VUE_APP_API_URL}requestToken/${
                 this.currentState
             }/${this.requestCode}`;
@@ -195,6 +202,7 @@ export default {
                 .then(response => {
                     this.token = response.body.access_token;
                     localStorage.setItem("token1", this.token);
+                    this.statusMessage = '';
                 })
                 .catch(error => {
                     console.log(error);
@@ -202,16 +210,19 @@ export default {
         },
 
         async getUsername() {
+            this.statusMessage = 'Fetching account username';
             const url = `${process.env.VUE_APP_API_URL}getUsername/${
                 this.token
             }`;
 
             var call = await http.get(url).then(response => {
                 this.username = response.body.name;
+                this.statusMessage = '';
             });
         },
 
         async getSavedPosts() {
+            this.statusMessage = 'Retrieving all saved posts'
             const url = `${process.env.VUE_APP_API_URL}getSaved/${
                 this.username
             }/${this.token}`;
@@ -226,6 +237,7 @@ export default {
                 );
                 this.requesting = false;
                 this.migrating = true;
+                this.statusMessage = '';
             });
         }
     }
