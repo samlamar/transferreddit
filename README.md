@@ -2,7 +2,7 @@
 
 > A tool to copy saved posts from one Reddit account to another one
 
-You can see and use the deployed website here: https://transferreddit.now.sh/
+You can see and use the deployed web app here: https://transferreddit.now.sh/
 
 
 ## Build Setup
