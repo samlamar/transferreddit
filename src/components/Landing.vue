@@ -16,7 +16,6 @@
             <loading-spinner v-if="requesting"></loading-spinner>
 
             <div class="alert alert-dismissible alert-danger" v-if="permissionsError">
-                <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
                 <strong>Couldn't get the permissions</strong>
                 <a href="." class="alert-link">Go back to the home page</a> and try again.
             </div>
@@ -24,7 +23,6 @@
 
         <div v-else>
             <div class="alert alert-dismissible alert-success">
-                <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
                 <strong>Transfer successful!</strong> You saved posts were moved.
                 <a href="/" class="alert-link">Transfer more?</a>.
             </div>
@@ -34,7 +32,6 @@
             <p>Don't forget to log out of the old account and log in to the right one if necessary</p>
         </div>
 
-        <!-- <img class="logo" src="../assets/reddit-logo.png" alt> -->
         <a href="https://github.com/samlamar/reddit-transfer-client" target="_blank">
             Check out my code on
             <img class="git-logo" src="../assets/github-logo.png" alt>
@@ -46,7 +43,6 @@
 <script>
 const http = require("superagent");
 const uuidv4 = require("uuid/v4");
-// require('dotenv').config()
 
 import LoadingSpinner from "./LoadingSpinner.vue";
 
@@ -108,7 +104,6 @@ export default {
                 }
             });
         } else if (this.$route.query.error) {
-            //error message
             this.permissionsError = true;
             console.log("error getting permissions");
         }
@@ -181,8 +176,6 @@ export default {
         },
 
         async requestRedditToken() {
-            //you stupid fuck, you spent two days racking your brains on this dumb error
-            //you didnt put http before localhost.
             const url = `${process.env.VUE_APP_API_URL}requestToken/${
                 this.currentState
             }/${this.requestCode}`;
@@ -192,7 +185,6 @@ export default {
                 .then(response => {
                     this.token = response.body.access_token;
                     localStorage.setItem("token1", this.token);
-                    // this.getUsername();
                 })
                 .catch(error => {
                     console.log(error);
@@ -206,7 +198,6 @@ export default {
 
             var call = await http.get(url).then(response => {
                 this.username = response.body.name;
-                // this.getSavedPosts();
             });
         },
 
@@ -236,10 +227,6 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
-/* .alert {
-    font-family: "Heebo", sans-serif;
-} */
 
 .wrapper {
     font-family: "Titillium Web", sans-serif;
