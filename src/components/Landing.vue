@@ -111,7 +111,7 @@ export default {
 
     methods: {
         homeClick() {
-            clearLocalStorage();
+            this.clearLocalStorage();
             window.open("/", "_self");
         },
         async getRedditToken() {
@@ -148,7 +148,7 @@ export default {
             const url = `${process.env.VUE_APP_API_URL}save/${this.token}`;
 
             http.get(url).then(response => {
-                clearLocalStorage();
+                this.clearLocalStorage();
                 if (!response.body.error) {
                     this.success = true;
                 }
