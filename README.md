@@ -29,7 +29,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ![reddit app setup](/res/appsetup.png)
 
-See the (very unhelpful) official [Reddit documentation](https://www.reddit.com/dev/api) and [their wiki](https://github.com/reddit-archive/reddit/wiki/API) for more information on how Reddit apps work.
+See the official [Reddit documentation](https://www.reddit.com/dev/api) and [their wiki](https://github.com/reddit-archive/reddit/wiki/API) for more information on how Reddit apps work.
 
 Once you have a Reddit app set up, you will also need to create 2 files named secret.js and devsecret.js in the config folder where you export the environment variables that contain the information needed to communicate with the Reddit API.
 
